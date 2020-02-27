@@ -18,4 +18,65 @@ app.on("ready", ()=> {
         app.quit();
         todayWindow = null;
     });
+    const mainMenu = Menu.buildFromTemplate(menuTemplate);
+    Menu.setApplicationMenu(mainMenu);
 });
+
+const listWindowCreator = () => {
+    listWindow = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true
+        },
+        width: 600,
+        height: 400,
+        title: "All Appoitments"
+    });
+    listWindow.setMenu(null);
+    listWindow.loadURL(`file://${__dirname}/list.html`);
+    listWindow.on("closed", ()=> (listWindow = null));
+};
+
+const createWindowCreator = () => {
+    createWindow = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true
+        },
+        width: 600,
+        height: 400,
+        title: "Create Appoitments"
+    });
+    createWindow.setMenu(null);
+    createWindow.loadURL(`file://${__dirname}/create.html`);
+    createWindow.on("closed", ()=> (createWindow = null));
+};
+
+const menuTemplate = [{
+    label: "File",
+    submenu: [
+        {
+            label: "New Appoitments",
+            click(){
+                createWindowCreator();
+            }
+        },
+        {
+            label: "All Appoitments",
+            click() {
+                listWindowCreator();
+            }
+        },
+        {
+            label: "Quit",
+            accelerator: process.platform === "darwin" ? "Command+Q" : 
+            "Ctrl + Q",
+            click() {
+                app.quit();
+            }
+        }
+    ]
+},
+{
+    label: "View",
+    submenu: [{ role: "reload" }, { role: "toogledevtools" }]
+}
+]
