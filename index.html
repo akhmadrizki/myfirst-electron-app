@@ -9,14 +9,16 @@
     <h1>Today Window</h1>
     <div id="list"></div>
 </body>
-<script>
+
+<Script>
     const electron = require("electron");
     const {ipcRenderer} = electron;
     ipcRenderer.send("appointment:request:today");
 
-    ipcRenderer.on("appointment:request:today", (event, appointment) => {
+    ipcRenderer.on("appointment:request:today", (event, appointments) => {
         const listDiv = document.getElementById("list");
-        appointments.forEach(appointment => {
+
+        appointments.forEach(appointments => {
             const appointmentDiv = document.createElement("div");
             const nameParagraph = document.createElement("p");
             nameParagraph.innerHTML = `Name: ${appointment.name}`;
@@ -31,7 +33,7 @@
             hourParagraph.innerHTML = `Hour: ${appointment.hour}`;
 
             const symptomsParagraph = document.createElement("p");
-            symptomsParagraph.innerHTML = `Symptoms: ${appointment.symptoms}`;
+            symptomsParagraph.innerHTML = `$Symptoms: ${appointment.symptoms}`;
 
             const doneParagraph = document.createElement("p");
             doneParagraph.innerHTML = `Done: ${appointment.done ? "Yes" : "No"}`;
@@ -49,15 +51,16 @@
             appointmentDiv.appendChild(hourParagraph);
             appointmentDiv.appendChild(symptomsParagraph);
             appointmentDiv.appendChild(doneParagraph);
-            appointmentDiv.appendChild(doneButton);
             appointmentDiv.appendChild(hr);
+            appointmentDiv.appendChild(doneParagraph);
+            appointmentDiv.appendChild(doneButton);
 
             listDiv.append(appointmentDiv);
         });
     });
 
     const done = id => {
-        ipcRenderer.send("appointment:done", id)
+        ipcRenderer.send("appointment:done",id);
     };
     
 </script>

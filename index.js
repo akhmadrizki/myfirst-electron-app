@@ -1,5 +1,6 @@
 const electron = require("electron");
-const uuid = require("uuid/v4");
+const uuid = require("uuid").v4;
+uuid();
 
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 
@@ -8,7 +9,7 @@ let createWindow;
 let listWindow;
 let aboutWindow;
 
-let allAppoinment = [];
+let allAppointment = [];
 
 app.on("ready", ()=> {
     todayWindow = new BrowserWindow({
@@ -26,14 +27,14 @@ app.on("ready", ()=> {
     Menu.setApplicationMenu(mainMenu);
 });
 
-const listWindowCreator = () => {
+const listWindowCreator = ()=>{
     listWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true
         },
         width: 600,
         height: 400,
-        title: "All Appoitments"
+        title: "All Appointments"
     });
     listWindow.setMenu(null);
     listWindow.loadURL(`file://${__dirname}/list.html`);
@@ -71,18 +72,18 @@ const aboutWindowCreator = () => {
 ipcMain.on("appointment:create", (event, appointment) => {
     appointment["id"] = uuid();
     appointment["done"] = 0;
-    allAppoinment.push(appointment);
+    allAppointment.push(appointment);
 
     createWindow.close();
 
-    console.log(allAppoinment);
+    console.log(allAppointment);
 });
 
 ipcMain.on("appointment:request:list", event => {
-    console.log("here");
+    listWindow.webContents.send('appointment:response:list', allAppointment);
 });
 
-ipcMain.on("appointment:request:today", event => {
+ipcMain.on("appointment:request:index", event => {
     console.log("here2");
 });
 
