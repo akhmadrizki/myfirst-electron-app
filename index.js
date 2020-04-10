@@ -1,4 +1,5 @@
 const electron = require("electron");
+const uuid = require("uuid/v4");
 
 const {app, BrowserWindow, Menu, ipcMain} = electron;
 
@@ -6,6 +7,8 @@ let todayWindow;
 let createWindow;
 let listWindow;
 let aboutWindow;
+
+let allAppoinment = [];
 
 app.on("ready", ()=> {
     todayWindow = new BrowserWindow({
@@ -66,7 +69,13 @@ const aboutWindowCreator = () => {
 };
 
 ipcMain.on("appointment:create", (event, appointment) => {
-    console.log(appointment);
+    appointment["id"] = uuid();
+    appointment["done"] = 0;
+    allAppoinment.push(appointment);
+
+    createWindow.close();
+
+    console.log(allAppoinment);
 });
 
 ipcMain.on("appointment:request:list", event => {
