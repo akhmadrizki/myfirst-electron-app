@@ -17,6 +17,7 @@
 
         ipcRenderer.on("appointment:response:today", (event, appointment) => {
         const listDiv = document.getElementById("list");
+        listDiv.innerHTML = "";
         
         appointment.forEach(appointment => {
         const appointmentDiv =document.createElement("div");
